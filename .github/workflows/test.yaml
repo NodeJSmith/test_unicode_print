@@ -20,11 +20,16 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        python-version: ['3.7','3.8','3.9','3.10','3.11' ]
+    name: Python ${{ matrix.python-version }} sample
+    continue-on-error: true    
     steps:
-
-      - name: print info
-        run: python -c "import sys; print('sys.stdout.encoding', sys.stdout.encoding); print('sys.flags',sys.flags);print('sys.getfilesystemencoding',sys.getfilesystemencoding());print(sys.stdout.buffer.raw)"     
+      - name: Setup python
+        uses: actions/setup-python@v4.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - run: python -c "print('└')"
       
-      - name: print unicode 
-        run: python -c "from click import utils; utils.echo('└')"
